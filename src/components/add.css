@@ -1,0 +1,115 @@
+/* Add a container to center the form */
+.add-center-container {
+    display: flex;
+    justify-content: center;
+    /* Subtract 280px for the sidebar and additional 20px padding on each side */
+
+}
+
+.add-form-heading {
+    text-align: center;
+    color: grey;
+    font-size: 23px;
+}
+
+.add-container {
+    flex: 1;
+    margin-left: 280px;
+    padding: 20px;
+}
+
+.add-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.add-container input,
+.add-container button {
+    padding: 10px;
+    width: 100%;
+    max-width: 300px;
+    /* Limit the maximum width of the inputs */
+    margin: 0 auto;
+    /* Center the inputs and button */
+}
+
+.add-container button {
+    background-color: #454545;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.add-container button:hover {
+    background-color: #171717;
+    transition: 1s;
+}
+
+.add-container input[type="text"] {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+
+    /* Include padding and border in the width calculation */
+}
+
+.add-container input[type="text"]:focus {
+    outline: none;
+    border-color: #171717;
+}
+
+
+
+
+
+.image-preview-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.image-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px;
+}
+
+.image-preview img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.image-preview button {
+    margin-top: 5px;
+    background-color: #454545;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.upload-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.upload-button-container input[type="file"] {
+    display: none;
+}
+
+.upload-button-container label {
+    padding: 8px 18px;
+    background-color: #454545;
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}
