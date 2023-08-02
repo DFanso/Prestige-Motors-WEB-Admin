@@ -1,0 +1,169 @@
+.sale-topic-container {
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: black;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.collection-container {
+    margin-top: 50px;
+}
+
+.sale-topic {
+    font-size: 1.6rem;
+    padding-left: 5px;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+}
+
+.h1-sale {
+    margin-left: 20px;
+}
+
+.card-sec {
+    display: flex;
+    width: 50%;
+    height: 300px;
+    /* You can adjust the height as needed */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #14141C;
+    color: #fff;
+
+
+}
+
+.all-card-row-margin {
+    margin-top: 40px;
+}
+
+.all-card-row-margin-2 {
+    margin-top: 10px;
+}
+
+.all-card-row-margin-2 {
+    margin-top: 15px;
+}
+
+.card-sec-margin {
+    margin-right: 15px;
+}
+
+.image-section {
+    flex: 2;
+    height: 100%;
+}
+
+.content-section {
+    flex: 1.5;
+    padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Vertically center the content */
+
+
+}
+
+.content-section h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+}
+
+.content-section h4 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    margin-bottom: 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #fff;
+}
+
+
+.content-section p {
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+
+}
+
+.sale-card-btn {
+
+    background-color: #F5F5F5;
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 10px;
+    cursor: pointer;
+
+}
+
+.sale-card-btn:hover {
+    background-color: #333;
+    color: #fff;
+    transition: 0.5s;
+}
+
+.sale-card-des {
+    margin-bottom: 20px;
+}
+
+.all-cards {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 300px;
+    margin-right: 10px;
+}
+
+.btn-sale-card {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.delete-update-btn-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sale-card-btn-delete {
+
+    background-color: rgb(200, 41, 41);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 10px;
+    cursor: pointer;
+    margin-right: 5px;
+
+}
+
+.sale-card-btn-delete:hover {
+    background-color: #b51a1a;
+    color: #fff;
+    transition: 0.5s;
+}
+
+.sale-card-btn-update {
+
+    background-color: rgb(46, 46, 195);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 10px;
+    cursor: pointer;
+    margin-right: 5px;
+
+}
+
+.sale-card-btn-update:hover {
+    background-color: rgb(25, 25, 198);
+    color: #fff;
+    transition: 0.5s;
+}
