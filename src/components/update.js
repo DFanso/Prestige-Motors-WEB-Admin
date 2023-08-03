@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import './update.css';
+import { useNavigate } from 'react-router-dom';
 
 const UpdateFormComponent = () => {
+    const navigate = useNavigate();
     const { id } = useParams();  // get the id from URL
     const apiUrl = `https://api.prestigemotorsvence.com/api/carForSale/${id}`;  // replace with your API endpoint
     const token = localStorage.getItem('token');  // replace 'token' with your token key
@@ -25,6 +27,7 @@ const UpdateFormComponent = () => {
         })
         .catch(error => {
             console.error('There was an error!', error);
+            
         });
     }, [apiUrl, token]);
 
@@ -45,6 +48,8 @@ const UpdateFormComponent = () => {
             }
         })
         .then(response => {
+            alert('Update Done');
+            navigate(`/dashboard/update-delete`);
             console.log(response.data);  // handle successful update
         })
         .catch(error => {

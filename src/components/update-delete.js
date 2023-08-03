@@ -22,6 +22,27 @@ const UpdateDeletePage = () => {
         navigate(`/dashboard/update/${id}`); // navigate to update page with id
     };
 
+    const handleDeleteButtonClick = (id) => {
+        if (window.confirm('Are you sure you want to delete this item?')) {
+            const token = localStorage.getItem('token'); // replace 'token' with your token key
+
+            axios.delete(`${apiUrl}/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then(() => {
+                setData(data.filter(car => car._id !== id)); // remove deleted car from state
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+        }
+    };
+
+
+
+
     return (
         <div className="update-delete">
             <div className='all-cards all-card-row-margin'>
@@ -38,7 +59,7 @@ const UpdateDeletePage = () => {
                                 {car.smallDescription}
                             </p>
                             <div className='delete-update-btn-container'>
-                                <div className='btn-sale-card'><button className='sale-card-btn-delete'>Delete</button></div>
+                                <div className='btn-sale-card'><button className='sale-card-btn-delete' onClick={() => handleDeleteButtonClick(car._id)}>Delete</button></div>
                                 <div className='btn-sale-card'><button className='sale-card-btn-update' onClick={() => handleUpdateButtonClick(car._id)}>Update</button></div>
                             </div>
                         </div>

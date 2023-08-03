@@ -5,6 +5,7 @@ import axios from 'axios';
 import ReactLoading from 'react-loading';
 
 const FormComponent = () => {
+
     const navigate = useNavigate();
     const MAX_IMAGES = 4;
 
