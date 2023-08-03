@@ -1,6 +1,8 @@
 import React, { useState,useEffect } from 'react';
 import './add.css';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 
 
 const FormComponent = () => {
@@ -13,6 +15,8 @@ const FormComponent = () => {
           navigate('/');
         }
       }, []);
+
+
     const [formData, setFormData] = useState({
         carName: '',
         smallDescription: '',
@@ -34,21 +38,52 @@ const FormComponent = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Do something with the form data, e.g., submit it to a backend or store in state
-        console.log(formData);
-        // Clear the form fields after submission
-        setFormData({
-            carName: '',
-            smallDescription: '',
-            largeDescription: '',
-            transmission: '',
-            mileage: '',
-            interiorColor: '',
-            exteriorColor: '',
+    
+        let data = new FormData();
+    
+        // Append form fields to data
+        for (let key in formData) {
+            data.append(key, formData[key]);
+        }
+    
+        // Append images to data
+        images.forEach((image) => {
+            data.append('photos', image); // key is 'photos' here
         });
+    
+        try {
+            const response = await axios.post('http://localhost:3000/api/restoration', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` //if your API requires authorization token
+                }
+            });
+    
+            console.log(response.data);
+    
+            // Clear the form fields after submission
+            setFormData({
+                carName: '',
+                smallDescription: '',
+                largeDescription: '',
+                transmission: '',
+                mileage: '',
+                interiorColor: '',
+                exteriorColor: '',
+            });
+    
+            // Clear images
+            setImages([]);
+    
+        } catch (error) {
+            console.error('There was an error!', error);
+        }
     };
+    
+    
+    
 
     const handleImageChange = (e) => {
         const files = e.target.files;
