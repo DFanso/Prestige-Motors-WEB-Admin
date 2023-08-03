@@ -64,7 +64,7 @@ const FormComponent = () => {
             data.append('photos', image);
         });
         try {
-            const response = await axios.post('https://api.prestigemotorsvence.com/api/restoration', data, {
+            const response = await axios.post('https://api.prestigemotorsvence.com/api/carForSale', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
