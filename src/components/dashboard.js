@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Route, Routes, Redirect } from 'react-router-dom'; // Replace Switch with Routes
 import Header from './header';
 import Sidebar from './sidebar';
@@ -10,9 +10,22 @@ import UpdateFormComponent from './update';
 import RestorationAdd from './res-add';
 import RestorationUpdateDeletePage from './res-update-delete';
 import RestorationUpdate from './res-update';
+import { useNavigate } from 'react-router-dom';
 
 
 function Dashboard() {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+    
+        if (!token) {
+          navigate('/');
+        }
+      }, []);
+
+
     return (
         <div className="dashboard">
             <Header />
@@ -22,7 +35,7 @@ function Dashboard() {
                     <Routes>
                         <Route path="/dashboard/welcome" element={
                             <>
-                                <h1>Welcome to N- Canteen Admin System</h1>
+                                <h1></h1>
                                 <img
                                     src="https://drive.google.com/uc?export=view&id=1slvbHnVs88jYb2wyxOgUsN97VR-HzxFz"
                                     alt="Food Management System"
