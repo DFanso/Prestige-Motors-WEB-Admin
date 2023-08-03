@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import './login.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import ReactLoading from 'react-loading';
 
 function Login() {
+    const [loading, setLoading] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate(); // Use useNavigate hook to handle navigation
@@ -23,6 +25,7 @@ function Login() {
 
         // you would replace '/api/login' with your actual login API endpoint
         try {
+            setLoading(true);
             const response = await axios.post('https://api.prestigemotorsvence.com/api/auth/login', {
                 username,
                 password
@@ -32,15 +35,18 @@ function Login() {
             if (response.data.token) {
                 // Save JWT token to local storage
                 localStorage.setItem('token', response.data.token);
+                setLoading(false);
 
                 // Redirect to dashboard
                 navigate('/dashboard'); 
             } else {
+                setLoading(false);
                 // Handle error: show a message to the user
                 alert("Login failed, please check your credentials and try again.");
             }
 
         } catch (error) {
+            setLoading(false);
             console.error("Error logging in", error);
             alert("An error occurred while trying to log you in.");
         }
@@ -48,7 +54,12 @@ function Login() {
 
     return (
         <div className="login-container">
-            <div className="login-box">
+           {loading ? (
+                <div className="loading-container">
+                    <ReactLoading type={"spin"} color={"#000"} />
+                </div>
+            ) : (
+                <div className="login-box">
                 <h1 className="login-heading">Login</h1>
                 <form className="login-form" onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -78,6 +89,7 @@ function Login() {
                     </div>
                 </form>
             </div>
+            )}
         </div>
     );
 }
