@@ -18,8 +18,8 @@ const UpdateDeletePage = () => {
             });
     }, []);
 
-    const handleUpdateButtonClick = () => {
-        navigate('/dashboard/update'); // Change '/update' to the path of your update page
+    const handleUpdateButtonClick = (id) => {
+        navigate(`/dashboard/update/${id}`); // navigate to update page with id
     };
 
     return (
@@ -39,7 +39,7 @@ const UpdateDeletePage = () => {
                             </p>
                             <div className='delete-update-btn-container'>
                                 <div className='btn-sale-card'><button className='sale-card-btn-delete'>Delete</button></div>
-                                <div className='btn-sale-card'><button className='sale-card-btn-update' onClick={handleUpdateButtonClick}>Update</button></div>
+                                <div className='btn-sale-card'><button className='sale-card-btn-update' onClick={() => handleUpdateButtonClick(car._id)}>Update</button></div>
                             </div>
                         </div>
                     </div>

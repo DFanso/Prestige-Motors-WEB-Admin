@@ -45,7 +45,7 @@ function Dashboard() {
                         } />
                         <Route path="/dashboard/search-food" element={<SearchFood />} />
                         <Route path="/add" element={<Add />} />
-                        <Route path="/update" element={<UpdateFormComponent />} />
+                        <Route path="/update/:id" element={<UpdateFormComponent />} />
                         <Route path="/update-delete" element={<UpdateDeletePage />} />
                         <Route path="/res-add" element={<RestorationAdd />} />
                         <Route path="/res-update-delete" element={<RestorationUpdateDeletePage />} />

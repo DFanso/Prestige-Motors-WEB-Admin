@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import './update.css';
 
-const UpdateFormComponent = ({ initialData }) => {  // Receive initial data as props
+const UpdateFormComponent = () => {
+    const { id } = useParams();  // get the id from URL
+    const apiUrl = `https://api.prestigemotorsvence.com/api/carForSale/${id}`;  // replace with your API endpoint
+    const token = localStorage.getItem('token');  // replace 'token' with your token key
+
     const [formData, setFormData] = useState({
         carName: '',
         smallDescription: '',
@@ -13,18 +19,14 @@ const UpdateFormComponent = ({ initialData }) => {  // Receive initial data as p
     });
 
     useEffect(() => {
-        if (initialData) {
-            setFormData({
-                carName: initialData.carName || '',
-                smallDescription: initialData.smallDescription || '',
-                largeDescription: initialData.largeDescription || '',
-                transmission: initialData.transmission || '',
-                mileage: initialData.mileage || '',
-                interiorColor: initialData.interiorColor || '',
-                exteriorColor: initialData.exteriorColor || '',
-            });
-        }
-    }, [initialData]);
+        axios.get(apiUrl)
+        .then(response => {
+            setFormData(response.data);  // set the form data based on API response
+        })
+        .catch(error => {
+            console.error('There was an error!', error);
+        });
+    }, [apiUrl, token]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -36,8 +38,18 @@ const UpdateFormComponent = ({ initialData }) => {  // Receive initial data as p
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Instead of clearing form after submit, use updated data to do something (e.g., make API request to update data on server)
-        console.log(formData);
+
+        axios.put(apiUrl, formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`  // send token in the headers
+            }
+        })
+        .then(response => {
+            console.log(response.data);  // handle successful update
+        })
+        .catch(error => {
+            console.error('There was an error!', error);
+        });
     };
 
     return (
