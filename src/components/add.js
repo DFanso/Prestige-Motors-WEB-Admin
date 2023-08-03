@@ -5,6 +5,7 @@ import axios from 'axios';
 import ReactLoading from 'react-loading';
 
 const FormComponent = () => {
+
     const navigate = useNavigate();
     const MAX_IMAGES = 4;
 
@@ -64,7 +65,7 @@ const FormComponent = () => {
             data.append('photos', image);
         });
         try {
-            const response = await axios.post('https://api.prestigemotorsvence.com/api/restoration', data, {
+            const response = await axios.post('https://api.prestigemotorsvence.com/api/carForSale', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
