@@ -95,28 +95,90 @@ const [formValid, setFormValid] = useState(false);
     };
 
     return (
-        <div className="add-container">
-            {loading ? (
-                <div className="loading-container">
-                    <ReactLoading type={"spin"} color={"#000"} />
-                </div>
-            ) : (
-                <>
-                    <h1 className="add-form-heading">Add Restoration cars</h1>
-                    {
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="carName" placeholder="Car Name" value={formData.carName} onChange={handleChange} />
-                <input type="text" name="smallDescription" placeholder="Small Description" value={formData.smallDescription} onChange={handleChange} />
-                <input type="text" name="largeDescription" placeholder="Large Description" value={formData.largeDescription} onChange={handleChange} />
-                <input type="text" name="transmission" placeholder="Transmission" value={formData.transmission} onChange={handleChange} />
-                <input type="text" name="mileage" placeholder="Mileage" value={formData.mileage} onChange={handleChange} />
-                <input type="text" name="interiorColor" placeholder="Interior Color" value={formData.interiorColor} onChange={handleChange} />
-                <input type="text" name="exteriorColor" placeholder="Exterior Color" value={formData.exteriorColor} onChange={handleChange} />
-                <div className="image-preview-container">
-                    {images.map((image, index) => (
-                        <div key={index} className="image-preview">
-                            <img src={URL.createObjectURL(image)} alt={`Image ${index}`} />
-                            <button onClick={() => handleRemoveImage(index)}>Remove</button>
+
+        <div className="res-add">
+            <div className="add-container">
+                <h1 className="add-form-heading">Add Restoration cars</h1>
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        name="carName"
+                        placeholder="Car Name"
+                        value={formData.carName}
+                        onChange={handleChange}
+                    />
+                    {/* <input
+                        type="text"
+                        name="smallDescription"
+                        placeholder="Small Description"
+                        value={formData.smallDescription}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="text"
+                        name="largeDescription"
+                        placeholder="Large Description"
+                        value={formData.largeDescription}
+                        onChange={handleChange}
+                    /> */}
+                    <textarea
+                        className='car-small-des-box'
+                        name="smallDescription"
+                        placeholder="Small Description"
+                        value={formData.smallDescription}
+                        onChange={handleChange}
+                    ></textarea>
+                    <textarea
+                        className='car-large-des-box'
+                        name="largeDescription"
+                        placeholder="Large Description"
+                        value={formData.largeDescription}
+                        onChange={handleChange}
+                    ></textarea>
+
+                    <input
+                        type="text"
+                        name="transmission"
+                        placeholder="Transmission"
+                        value={formData.transmission}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="text"
+                        name="mileage"
+                        placeholder="Mileage"
+                        value={formData.mileage}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="text"
+                        name="interiorColor"
+                        placeholder="Interior Color"
+                        value={formData.interiorColor}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="text"
+                        name="exteriorColor"
+                        placeholder="Exterior Color"
+                        value={formData.exteriorColor}
+                        onChange={handleChange}
+                    />
+
+                    <div className="image-preview-container">
+                        {images.map((image, index) => (
+                            <div key={index} className="image-preview">
+                                <img src={URL.createObjectURL(image)} alt={`Image ${index}`} />
+                                <button onClick={() => handleRemoveImage(index)}>Remove</button>
+                            </div>
+                        ))}
+                    </div>
+
+                    {images.length < MAX_IMAGES && (
+                        <div className="upload-button-container">
+                            <input type="file" id="image-upload" accept="image/*" multiple onChange={handleImageChange} />
+                            <label htmlFor="image-upload">Upload Image</label>
+
                         </div>
                     ))}
                 </div>

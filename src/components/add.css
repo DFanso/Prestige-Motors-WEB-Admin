@@ -24,14 +24,33 @@
     gap: 10px;
 }
 
-.add-container input,
+.add-container input[type="text"],
 .add-container button {
-    padding: 10px;
+    width: 400px;
+    max-width: 400px;
+    /* Other styles... */
+}
+
+
+.car-small-des-box {
     width: 100%;
-    max-width: 300px;
-    /* Limit the maximum width of the inputs */
+    max-width: 400px;
+    /* Limit the maximum width of the textarea */
+    height: 100px;
+    /* Adjust the height to your preference */
+    /* Set the desired height for the textarea */
     margin: 0 auto;
-    /* Center the inputs and button */
+    /* Center the textarea */
+}
+
+.car-large-des-box {
+    width: 100%;
+    max-width: 400px;
+    /* Limit the maximum width of the textarea */
+    height: 200px;
+    /* Adjust the height to your preference */
+    /* Set the desired height for the textarea */
+    margin: 0 auto;
 }
 
 .add-container button {
@@ -118,5 +137,5 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; 
+    height: 100vh;
 }
