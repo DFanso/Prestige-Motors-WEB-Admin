@@ -71,7 +71,7 @@ const RestorationUpdate = () => {  // Receive initial data as props
                         value={formData.carName}
                         onChange={handleChange}
                     />
-                    <input
+                    {/* <input
                         type="text"
                         name="smallDescription"
                         placeholder="Small Description"
@@ -84,7 +84,21 @@ const RestorationUpdate = () => {  // Receive initial data as props
                         placeholder="Large Description"
                         value={formData.largeDescription}
                         onChange={handleChange}
-                    />
+                    /> */}
+                    <textarea
+                        className='car-small-des-box'
+                        name="smallDescription"
+                        placeholder="Small Description"
+                        value={formData.smallDescription}
+                        onChange={handleChange}
+                    ></textarea>
+                    <textarea
+                        className='car-large-des-box'
+                        name="largeDescription"
+                        placeholder="Large Description"
+                        value={formData.largeDescription}
+                        onChange={handleChange}
+                    ></textarea>
                     <input
                         type="text"
                         name="transmission"

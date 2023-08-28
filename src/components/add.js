@@ -7,7 +7,7 @@ import ReactLoading from 'react-loading';
 const FormComponent = () => {
 
     const navigate = useNavigate();
-    const MAX_IMAGES = 4;
+    const MAX_IMAGES = 3;
 
     const [loading, setLoading] = useState(false);
 
