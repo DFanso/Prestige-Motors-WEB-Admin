@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './add.css';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import ReactLoading from 'react-loading';
 
 const RestorationAdd = () => {
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+
     const [formData, setFormData] = useState({
         carName: '',
         smallDescription: '',
@@ -14,35 +20,71 @@ const RestorationAdd = () => {
 
     const [images, setImages] = useState([]);
     const MAX_IMAGES = 4;
+const [formValid, setFormValid] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        if (name === 'mileage' && isNaN(value)) {
+            return;
+        }
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
     };
 
-    const handleSubmit = (e) => {
+     useEffect(() => {
+        const allFieldsFilled = Object.values(formData).every((field) => field !== '');
+        const mileageIsNumber = !isNaN(formData.mileage);
+        const correctImageCount = images.length === MAX_IMAGES;
+        setFormValid(allFieldsFilled && mileageIsNumber && correctImageCount);
+    }, [formData, images]);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Do something with the form data, e.g., submit it to a backend or store in state
-        console.log(formData);
-        // Clear the form fields after submission
-        setFormData({
-            carName: '',
-            smallDescription: '',
-            largeDescription: '',
-            transmission: '',
-            mileage: '',
-            interiorColor: '',
-            exteriorColor: '',
+        if (!formValid) {
+            alert('Please fill all fields, enter a numeric value for mileage, and upload exactly 4 images.');
+            return;
+        }
+        setLoading(true);
+
+        let data = new FormData();
+        for (let key in formData) {
+            data.append(key, formData[key]);
+        }
+        images.forEach((image) => {
+            data.append('photos', image);
         });
+        try {
+            const response = await axios.post('https://api.prestigemotorsvence.com/api/restoration', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setLoading(false);
+            alert('Adding completed successfully');
+            console.log(response.data);
+            setFormData({
+                carName: '',
+                smallDescription: '',
+                largeDescription: '',
+                transmission: '',
+                mileage: '',
+                interiorColor: '',
+                exteriorColor: '',
+            });
+            setImages([]);
+        } catch (error) {
+            setLoading(false);
+            console.error('There was an error!', error);
+            alert('Operation failed');
+        }
     };
 
     const handleImageChange = (e) => {
         const files = e.target.files;
         if (files.length + images.length <= MAX_IMAGES) {
-            // Convert FileList to an array and store the images
             const imageArray = Array.from(files);
             setImages((prevImages) => [...prevImages, ...imageArray]);
         }
@@ -53,6 +95,7 @@ const RestorationAdd = () => {
     };
 
     return (
+
         <div className="res-add">
             <div className="add-container">
                 <h1 className="add-form-heading">Add Restoration cars</h1>
@@ -135,12 +178,20 @@ const RestorationAdd = () => {
                         <div className="upload-button-container">
                             <input type="file" id="image-upload" accept="image/*" multiple onChange={handleImageChange} />
                             <label htmlFor="image-upload">Upload Image</label>
-                        </div>
-                    )}
-                    <button type="submit">Add</button>
-                </form>
 
-            </div>
+                        </div>
+                    ))}
+                </div>
+                {images.length < MAX_IMAGES && (
+                    <div className="upload-button-container">
+                        <input type="file" id="image-upload" accept="image/*" multiple onChange={handleImageChange} />
+                        <label htmlFor="image-upload">Upload Image</label>
+                    </div>
+                )}
+                <button type="submit" disabled={!formValid}>Add</button>
+            </form>}
+                </>
+            )}
         </div>
     );
 };

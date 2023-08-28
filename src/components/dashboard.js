@@ -49,7 +49,7 @@ function Dashboard() {
                         <Route path="/update-delete" element={<UpdateDeletePage />} />
                         <Route path="/res-add" element={<RestorationAdd />} />
                         <Route path="/res-update-delete" element={<RestorationUpdateDeletePage />} />
-                        <Route path="/res-update" element={<RestorationUpdate />} />
+                        <Route path="/res-update/:id" element={<RestorationUpdate />} />
                         {/* <Route path="/dashboard/food-management" element={<FoodManagement />} />
                         <Route path="/dashboard/order-history" element={<OrderHistory />} />
                         <Route path="/dashboard/all-order-history" element={<AllOrderHistory />} />
