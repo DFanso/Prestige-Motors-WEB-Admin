@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
-import './add.css';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import './update.css';
+import { useNavigate } from 'react-router-dom';
 
-const RestorationAdd = () => {
+const RestorationUpdate = () => {  // Receive initial data as props
+    const navigate = useNavigate();
+    const { id } = useParams();  // get the id from URL
+    const apiUrl = `https://api.prestigemotorsvence.com/api/restoration/${id}`;  // replace with your API endpoint
+    const token = localStorage.getItem('token');  // replace 'token' with your token key
+
     const [formData, setFormData] = useState({
         carName: '',
         smallDescription: '',
@@ -12,8 +20,18 @@ const RestorationAdd = () => {
         exteriorColor: '',
     });
 
-    const [images, setImages] = useState([]);
-    const MAX_IMAGES = 4;
+
+
+    useEffect(() => {
+        axios.get(apiUrl)
+            .then(response => {
+                setFormData(response.data);  // set the form data based on API response
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+
+            });
+    }, [apiUrl, token]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -25,37 +43,26 @@ const RestorationAdd = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Do something with the form data, e.g., submit it to a backend or store in state
-        console.log(formData);
-        // Clear the form fields after submission
-        setFormData({
-            carName: '',
-            smallDescription: '',
-            largeDescription: '',
-            transmission: '',
-            mileage: '',
-            interiorColor: '',
-            exteriorColor: '',
-        });
-    };
 
-    const handleImageChange = (e) => {
-        const files = e.target.files;
-        if (files.length + images.length <= MAX_IMAGES) {
-            // Convert FileList to an array and store the images
-            const imageArray = Array.from(files);
-            setImages((prevImages) => [...prevImages, ...imageArray]);
-        }
-    };
-
-    const handleRemoveImage = (index) => {
-        setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+        axios.put(apiUrl, formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`  // send token in the headers
+            }
+        })
+            .then(response => {
+                alert('Update Done');
+                navigate(`/dashboard/res-update-delete`);
+                console.log(response.data);  // handle successful update
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
     };
 
     return (
-        <div className="res-add">
+        <div className='res-update'>
             <div className="add-container">
-                <h1 className="add-form-heading">Add Restoration cars</h1>
+                <h1 className="add-form-heading">Update Restoration cars</h1>
                 <form onSubmit={handleSubmit}>
                     <input
                         type="text"
@@ -64,7 +71,7 @@ const RestorationAdd = () => {
                         value={formData.carName}
                         onChange={handleChange}
                     />
-                    {/* <input
+                    <input
                         type="text"
                         name="smallDescription"
                         placeholder="Small Description"
@@ -77,22 +84,7 @@ const RestorationAdd = () => {
                         placeholder="Large Description"
                         value={formData.largeDescription}
                         onChange={handleChange}
-                    /> */}
-                    <textarea
-                        className='car-small-des-box'
-                        name="smallDescription"
-                        placeholder="Small Description"
-                        value={formData.smallDescription}
-                        onChange={handleChange}
-                    ></textarea>
-                    <textarea
-                        className='car-large-des-box'
-                        name="largeDescription"
-                        placeholder="Large Description"
-                        value={formData.largeDescription}
-                        onChange={handleChange}
-                    ></textarea>
-
+                    />
                     <input
                         type="text"
                         name="transmission"
@@ -121,34 +113,11 @@ const RestorationAdd = () => {
                         value={formData.exteriorColor}
                         onChange={handleChange}
                     />
-
-                    <div className="image-preview-container">
-                        {images.map((image, index) => (
-                            <div key={index} className="image-preview">
-                                <img src={URL.createObjectURL(image)} alt={`Image ${index}`} />
-                                <button onClick={() => handleRemoveImage(index)}>Remove</button>
-                            </div>
-                        ))}
-                    </div>
-
-                    {images.length < MAX_IMAGES && (
-                        <div className="upload-button-container">
-                            <input type="file" id="image-upload" accept="image/*" multiple onChange={handleImageChange} />
-                            <label htmlFor="image-upload">Upload Image</label>
-                        </div>
-                    )}
-                    <button type="submit">Add</button>
+                    <button type="submit">Update</button>
                 </form>
-
             </div>
         </div>
     );
 };
 
-export default RestorationAdd;
-
-
-
-
-
-
+export default RestorationUpdate;
