@@ -5,6 +5,7 @@ import axios from 'axios';
 import ReactLoading from 'react-loading';
 
 const RestorationAdd = () => {
+
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
@@ -19,8 +20,19 @@ const RestorationAdd = () => {
     });
 
     const [images, setImages] = useState([]);
-    const MAX_IMAGES = 4;
     const [formValid, setFormValid] = useState(false);
+
+    const handleImageChange = (e) => {
+        const files = e.target.files;
+        const selectedImages = Array.from(files);
+        const totalImageCount = images.length + selectedImages.length;
+
+        if (totalImageCount <= 4) {
+            setImages((prevImages) => [...prevImages, ...selectedImages]);
+        } else {
+            alert('You can only upload up to 4 images.');
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -36,14 +48,15 @@ const RestorationAdd = () => {
     useEffect(() => {
         const allFieldsFilled = Object.values(formData).every((field) => field !== '');
         const mileageIsNumber = !isNaN(formData.mileage);
-        const correctImageCount = images.length === MAX_IMAGES;
-        setFormValid(allFieldsFilled && mileageIsNumber && correctImageCount);
+        setFormValid(allFieldsFilled && mileageIsNumber);
     }, [formData, images]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formValid) {
-            alert('Please fill all fields, enter a numeric value for mileage, and upload exactly 4 images.');
+        
+        const selectedImageCount = images.length;
+        if (selectedImageCount < 2 || selectedImageCount > 4 || !formValid) {
+            alert('Please fill all fields, enter a numeric value for mileage, and upload between 2 and 4 images.');
             return;
         }
         setLoading(true);
@@ -82,21 +95,18 @@ const RestorationAdd = () => {
         }
     };
 
-    const handleImageChange = (e) => {
-        const files = e.target.files;
-        if (files.length + images.length <= MAX_IMAGES) {
-            const imageArray = Array.from(files);
-            setImages((prevImages) => [...prevImages, ...imageArray]);
-        }
-    };
-
     const handleRemoveImage = (index) => {
         setImages((prevImages) => prevImages.filter((_, i) => i !== index));
     };
 
     return (
         <div className="res-add">
-            <div className="add-container">
+             {loading ? (
+                <div className="loading-container">
+                    <ReactLoading type={"spin"} color={"#000"} />
+                </div>
+            ) : (
+                <div className="add-container">
                 <h1 className="add-form-heading">Add Restoration cars</h1>
                 <form onSubmit={handleSubmit}>
                     <input
@@ -173,7 +183,7 @@ const RestorationAdd = () => {
                         ))}
                     </div>
 
-                    {images.length < MAX_IMAGES && (
+                    { (
                         <div className="upload-button-container">
                             <input type="file" id="image-upload" accept="image/*" multiple onChange={handleImageChange} />
                             <label htmlFor="image-upload">Upload Image</label>
@@ -183,6 +193,8 @@ const RestorationAdd = () => {
                     <button type="submit" disabled={!formValid}>Add</button>
                 </form>
             </div>
+            )}
+            
         </div>
     );
 };

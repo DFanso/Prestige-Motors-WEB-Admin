@@ -7,7 +7,6 @@ import ReactLoading from 'react-loading';
 const FormComponent = () => {
 
     const navigate = useNavigate();
-    const MAX_IMAGES = 3;
 
     const [loading, setLoading] = useState(false);
 
@@ -31,11 +30,22 @@ const FormComponent = () => {
     const [images, setImages] = useState([]);
     const [formValid, setFormValid] = useState(false);
 
+    const handleImageChange = (e) => {
+        const files = e.target.files;
+        const selectedImages = Array.from(files);
+        const totalImageCount = images.length + selectedImages.length;
+
+        if (totalImageCount <= 4) {
+            setImages((prevImages) => [...prevImages, ...selectedImages]);
+        } else {
+            alert('You can only upload up to 4 images.');
+        }
+    };
+
     useEffect(() => {
         const allFieldsFilled = Object.values(formData).every((field) => field !== '');
         const mileageIsNumber = !isNaN(formData.mileage);
-        const correctImageCount = images.length === MAX_IMAGES;
-        setFormValid(allFieldsFilled && mileageIsNumber && correctImageCount);
+        setFormValid(allFieldsFilled && mileageIsNumber);
     }, [formData, images]);
 
     const handleChange = (e) => {
@@ -51,8 +61,10 @@ const FormComponent = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formValid) {
-            alert('Please fill all fields, enter a numeric value for mileage, and upload atleast 2 images.');
+        
+        const selectedImageCount = images.length;
+        if (selectedImageCount < 2 || selectedImageCount > 4 || !formValid) {
+            alert('Please fill all fields, enter a numeric value for mileage, and upload between 2 and 4 images.');
             return;
         }
         setLoading(true);
@@ -88,14 +100,6 @@ const FormComponent = () => {
             setLoading(false);
             console.error('There was an error!', error);
             alert('Operation failed');
-        }
-    };
-
-    const handleImageChange = (e) => {
-        const files = e.target.files;
-        if (files.length + images.length <= MAX_IMAGES) {
-            const imageArray = Array.from(files);
-            setImages((prevImages) => [...prevImages, ...imageArray]);
         }
     };
 
@@ -143,7 +147,7 @@ const FormComponent = () => {
                                     </div>
                                 ))}
                             </div>
-                            {images.length < MAX_IMAGES && (
+                            {(
                                 <div className="upload-button-container">
                                     <input type="file" id="image-upload" accept="image/*" multiple onChange={handleImageChange} />
                                     <label htmlFor="image-upload">Upload Image</label>
