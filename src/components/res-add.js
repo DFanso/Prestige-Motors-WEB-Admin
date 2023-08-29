@@ -1,12 +1,14 @@
-import React, { useState,useEffect } from 'react';
-import './add.css';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ReactLoading from 'react-loading';
+import { useParams } from 'react-router-dom';
+import './update.css';
+import { useNavigate } from 'react-router-dom';
 
-const RestorationAdd = () => {
+const RestorationUpdate = () => {  // Receive initial data as props
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    const { id } = useParams();  // get the id from URL
+    const apiUrl = `https://api.prestigemotorsvence.com/api/restoration/${id}`;  // replace with your API endpoint
+    const token = localStorage.getItem('token');  // replace 'token' with your token key
 
     const [formData, setFormData] = useState({
         carName: '',
@@ -18,87 +20,49 @@ const RestorationAdd = () => {
         exteriorColor: '',
     });
 
-    const [images, setImages] = useState([]);
-    const MAX_IMAGES = 4;
-const [formValid, setFormValid] = useState(false);
+
+
+    useEffect(() => {
+        axios.get(apiUrl)
+            .then(response => {
+                setFormData(response.data);  // set the form data based on API response
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+
+            });
+    }, [apiUrl, token]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (name === 'mileage' && isNaN(value)) {
-            return;
-        }
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
     };
 
-     useEffect(() => {
-        const allFieldsFilled = Object.values(formData).every((field) => field !== '');
-        const mileageIsNumber = !isNaN(formData.mileage);
-        const correctImageCount = images.length === MAX_IMAGES;
-        setFormValid(allFieldsFilled && mileageIsNumber && correctImageCount);
-    }, [formData, images]);
-
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        if (!formValid) {
-            alert('Please fill all fields, enter a numeric value for mileage, and upload exactly 4 images.');
-            return;
-        }
-        setLoading(true);
 
-        let data = new FormData();
-        for (let key in formData) {
-            data.append(key, formData[key]);
-        }
-        images.forEach((image) => {
-            data.append('photos', image);
-        });
-        try {
-            const response = await axios.post('https://api.prestigemotorsvence.com/api/restoration', data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
+        axios.put(apiUrl, formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`  // send token in the headers
+            }
+        })
+            .then(response => {
+                alert('Update Done');
+                navigate(`/dashboard/res-update-delete`);
+                console.log(response.data);  // handle successful update
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
             });
-            setLoading(false);
-            alert('Adding completed successfully');
-            console.log(response.data);
-            setFormData({
-                carName: '',
-                smallDescription: '',
-                largeDescription: '',
-                transmission: '',
-                mileage: '',
-                interiorColor: '',
-                exteriorColor: '',
-            });
-            setImages([]);
-        } catch (error) {
-            setLoading(false);
-            console.error('There was an error!', error);
-            alert('Operation failed');
-        }
-    };
-
-    const handleImageChange = (e) => {
-        const files = e.target.files;
-        if (files.length + images.length <= MAX_IMAGES) {
-            const imageArray = Array.from(files);
-            setImages((prevImages) => [...prevImages, ...imageArray]);
-        }
-    };
-
-    const handleRemoveImage = (index) => {
-        setImages((prevImages) => prevImages.filter((_, i) => i !== index));
     };
 
     return (
-
-        <div className="res-add">
+        <div className='res-update'>
             <div className="add-container">
-                <h1 className="add-form-heading">Add Restoration cars</h1>
+                <h1 className="add-form-heading">Update Restoration cars</h1>
                 <form onSubmit={handleSubmit}>
                     <input
                         type="text"
@@ -135,7 +99,6 @@ const [formValid, setFormValid] = useState(false);
                         value={formData.largeDescription}
                         onChange={handleChange}
                     ></textarea>
-
                     <input
                         type="text"
                         name="transmission"
@@ -164,42 +127,11 @@ const [formValid, setFormValid] = useState(false);
                         value={formData.exteriorColor}
                         onChange={handleChange}
                     />
-
-                    <div className="image-preview-container">
-                        {images.map((image, index) => (
-                            <div key={index} className="image-preview">
-                                <img src={URL.createObjectURL(image)} alt={`Image ${index}`} />
-                                <button onClick={() => handleRemoveImage(index)}>Remove</button>
-                            </div>
-                        ))}
-                    </div>
-
-                    {images.length < MAX_IMAGES && (
-                        <div className="upload-button-container">
-                            <input type="file" id="image-upload" accept="image/*" multiple onChange={handleImageChange} />
-                            <label htmlFor="image-upload">Upload Image</label>
-
-                        </div>
-                    ))}
-                </div>
-                {images.length < MAX_IMAGES && (
-                    <div className="upload-button-container">
-                        <input type="file" id="image-upload" accept="image/*" multiple onChange={handleImageChange} />
-                        <label htmlFor="image-upload">Upload Image</label>
-                    </div>
-                )}
-                <button type="submit" disabled={!formValid}>Add</button>
-            </form>}
-                </>
-            )}
+                    <button type="submit">Update</button>
+                </form>
+            </div>
         </div>
     );
 };
 
-export default RestorationAdd;
-
-
-
-
-
-
+export default RestorationUpdate;
